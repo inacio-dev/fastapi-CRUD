@@ -1,0 +1,35 @@
+# Framework
+fastapi>=0.115.6
+uvicorn>=0.32.1
+
+# Database migration
+sqlalchemy>=2.0.36
+psycopg2-binary>=2.9.10
+alembic>=1.14.0
+
+# Validação e serialização
+pydantic>=2.10.3
+python-jose>=3.3.0
+passlib>=1.7.4
+python-multipart>=0.0.19
+
+# Develop and Linting
+black>=24.10.0
+flake8>=7.1.1
+flake8-docstrings>=1.7.0
+isort>=5.13.2
+pytest>=8.3.4
+pytest-cov>=6.0.0
+python-dotenv>=1.0.1
+loguru>=0.7.3
+
+# Redis
+redis>=5.2.1
+fastapi-redis-cache>=0.2.5
+
+# Async
+APScheduler>=3.11.0
+requests>=2.31.0
+async-sqlalchemy>=1.0.0
+sqlalchemy[asyncio]
+asyncpg>=0.30.0
