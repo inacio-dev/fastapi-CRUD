@@ -1,0 +1,1 @@
+# pactodb-for-telemetria

@@ -1,0 +1,52 @@
+services:
+  web:
+    container_name: web
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./app:/code/app
+      - ./logs:/code/logs
+      - ./migrations:/code/migrations
+      - /etc/localtime:/etc/localtime:ro
+    env_file:
+      - .env
+    networks:
+      - project-net
+    depends_on:
+      postgresql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  postgresql:
+    container_name: postgresql
+    image: postgres:latest
+    env_file:
+      - .env
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+    networks:
+      - project-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  redis:
+    container_name: redis
+    image: redis:alpine
+    networks:
+      - project-net
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+networks:
+  project-net:
+    external: true
