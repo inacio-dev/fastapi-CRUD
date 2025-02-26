@@ -1,0 +1,53 @@
+services:
+  drive-web:
+    container_name: drive-web
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./app:/code/app
+      - ./logs:/code/logs
+      - ./drive:/code/drive
+      - ./migrations:/code/migrations
+      - /etc/localtime:/etc/localtime:ro
+    env_file:
+      - .env
+    networks:
+      - project-net
+    depends_on:
+      drive-postgresql:
+        condition: service_healthy
+      drive-redis:
+        condition: service_healthy
+
+  drive-postgresql:
+    container_name: drive-postgresql
+    image: postgres:alpine
+    env_file:
+      - .env
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+    networks:
+      - project-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  drive-redis:
+    container_name: drive-redis
+    image: redis:alpine
+    networks:
+      - project-net
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+networks:
+  project-net:
+    external: true

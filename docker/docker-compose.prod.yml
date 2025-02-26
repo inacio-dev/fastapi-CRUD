@@ -1,0 +1,22 @@
+services:
+  drive-web:
+    container_name: drive-web
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    ports:
+      - "8030:8030"
+    volumes:
+      - ../app:/code/app
+      - ../logs:/code/logs
+      - ../drive:/code/drive
+      - ../migrations:/code/migrations
+      - /etc/localtime:/etc/localtime:ro
+    env_file:
+      - ../.env
+    networks:
+      - production
+
+networks:
+  production:
+    external: true

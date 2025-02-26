@@ -1,0 +1,22 @@
+services:
+  drive-web:
+    container_name: drive-web
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    ports:
+      - "8001:8001"
+    volumes:
+      - ../app:/code/app
+      - ../logs:/code/logs
+      - ../drive:/code/drive
+      - ../migrations:/code/migrations
+      - /etc/localtime:/etc/localtime:ro
+    env_file:
+      - ../.env
+    networks:
+      - staging
+
+networks:
+  staging:
+    external: true
